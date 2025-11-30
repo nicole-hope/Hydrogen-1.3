@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hydrogen</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    background: radial-gradient(ellipse at bottom, #0d0d1a 0%, #000000 100%);
+    overflow: hidden;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+
+  /* Stars */
+  .stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    opacity: 0.8;
+    animation: twinkle 2s infinite alternate;
+  }
+
+  @keyframes twinkle {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+  }
+
+  /* Shooting stars */
+  .shooting-star {
+    position: absolute;
+    width: 2px;
+    height: 100px;
+    background: linear-gradient(white, transparent);
+    opacity: 0;
+    transform: rotate(-45deg);
+  }
+
+  @keyframes shoot {
+    0% { transform: translate(0,0) rotate(-45deg); opacity: 1; }
+    100% { transform: translate(100vw, 100vh) rotate(-45deg); opacity: 0; }
+  }
+
+  /* Moon with floating animation */
+  .moon {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+    border-radius: 50%;
+    box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.3);
+    z-index: 1;
+    animation: floatMoon 6s ease-in-out infinite alternate;
+  }
+
+  @keyframes floatMoon {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(15px); }
+    100% { transform: translateY(0); }
+  }
+
+  /* Message box */
+  .message {
+    position: relative;
+    z-index: 2;
+    max-width: 90%;
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    font-size: 0.9em;
+    line-height: 1.5;
+    backdrop-filter: blur(5px);
+    color: #fefefe;
+    overflow-y: auto;
+    max-height: 80vh;
+  }
+
+  /* Hide scrollbar but still scrollable */
+  .message::-webkit-scrollbar { display: none; }
+  .message { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .message h1 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #ffffff;
+  }
+
+  @media(min-width: 600px){
+    .message { font-size: 1em; padding: 25px; }
+    .message h1 { font-size: 1.4em; }
+  }
+
+  footer {
+    margin-top: 15px;
+    z-index: 2;
+    color: #fefefe;
+    text-align: center;
+  }
+
+  /* Play button */
+  #playButton {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px;
+    font-size: 1em;
+    border: none;
+    border-radius: 10px;
+    background-color: #ffffffaa;
+    color: #000;
+    cursor: pointer;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="moon"></div>
+
+<div class="message" id="message">
+  <h1>Happy 18th, Babe!</h1>
+  <p><br>
+    Happy Birthday, Mr. Dela Cruz. I made this little gift since I wanted to greet you differently this year...
+  </p>
+  <p>...You are amazing, and I just… I want you to know that you matter so much to me.</p>
+  <br>
+  Again, Happiest Birthday My Medicine.
+</div>
+
+<footer>
+  With love and lots of hugs,<br>
+  <strong>— Your Vina. 💌</strong>
+</footer>
+
+<!-- Music -->
+<audio id="bgMusic" loop>
+  <source src="https://raw.githubusercontent.com/nicole-hope/Hydrogen-1/main/Goo%20Goo%20Dolls%20-%20Iris%20[xK4ZqrLys_k].mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<!-- Play Button -->
+<button id="playButton">Play Music </button>
+
+<script>
+  const starsContainer = document.getElementById('stars');
+
+  // Generate twinkling stars
+  for(let i = 0; i < 120; i++){
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.top = Math.random() * 100 + '%';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+    star.style.animationDuration = Math.random() * 3 + 2 + 's';
+    starsContainer.appendChild(star);
+  }
+
+  // Shooting stars
+  function shootingStar(){
+    const star = document.createElement('div');
+    star.classList.add('shooting-star');
+    star.style.top = Math.random() * window.innerHeight/2 + 'px';
+    star.style.left = Math.random() * window.innerWidth/2 + 'px';
+    star.style.animation = `shoot ${Math.random() * 1 + 0.5}s linear forwards`;
+    starsContainer.appendChild(star);
+    setTimeout(() => {
+      starsContainer.removeChild(star);
+    }, 2000);
+  }
+  setInterval(shootingStar, 3000);
+
+  // Play button logic
+  const music = document.getElementById('bgMusic');
+  const playButton = document.getElementById('playButton');
+
+  playButton.addEventListener('click', () => {
+    music.play().then(() => {
+      playButton.style.display = 'none'; // hide button
+    }).catch(err => console.log("Playback failed:", err));
+  });
+</script>
+
+</body>
+</html>
